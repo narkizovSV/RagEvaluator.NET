@@ -1,6 +1,6 @@
-﻿using RagEvaluator.Core.Entities;
+﻿using RagEvaluator.RelevanceJudge.Models.Entities;
 
-namespace RagEvaluator.Contracts.Interfaces;
+namespace RagEvaluator.RelevanceJudge.Interfaces;
 
 /// <summary>
 /// Строит матрицу релевантности: для каждой пары «вопрос — partition» вызывает <see cref="IQuestionChunkRelevanceJudge"/>.

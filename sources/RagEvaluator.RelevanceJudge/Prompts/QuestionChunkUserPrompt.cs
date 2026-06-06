@@ -1,7 +1,4 @@
-using RagEvaluator.Contracts.Configuration;
-using RagEvaluator.Contracts.Enums;
-
-namespace RagEvaluator.BusinessLogic.Prompts.RelevanceJudging;
+﻿namespace RagEvaluator.RelevanceJudge.Prompts;
 
 /// <summary>
 /// Шаблоны сообщений для сценария <see cref="LlmScenarioType.RelevanceJudging"/>:

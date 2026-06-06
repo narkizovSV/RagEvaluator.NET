@@ -1,4 +1,4 @@
-namespace RagEvaluator.Core.Entities;
+﻿namespace RagEvaluator.RelevanceJudge.Models.Entities;
 
 /// <summary>
 /// Одна запись матрицы релевантности: пара «вопрос — partition» и производные шкалы.

@@ -1,4 +1,4 @@
-﻿namespace RagEvaluator.Contracts.Interfaces;
+﻿namespace RagEvaluator.RelevanceJudge.Interfaces;
 
 /// <summary>
 /// Преобразует исходную шкалу релевантности в используемые в системе производные шкалы.

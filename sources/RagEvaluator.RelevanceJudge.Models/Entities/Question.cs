@@ -1,4 +1,4 @@
-namespace RagEvaluator.Core.Entities;
+﻿namespace RagEvaluator.RelevanceJudge.Models.Entities;
 
 /// <summary>
 /// Вопрос, для которого выполняется retrieval-оценка.

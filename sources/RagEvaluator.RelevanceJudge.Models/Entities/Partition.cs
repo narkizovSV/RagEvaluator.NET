@@ -1,4 +1,4 @@
-namespace RagEvaluator.Core.Entities;
+﻿namespace RagEvaluator.RelevanceJudge.Models.Entities;
 
 /// <summary>
 /// Контентный чанк (partition), который участвует в retrieval и разметке релевантности.

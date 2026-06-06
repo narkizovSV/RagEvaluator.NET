@@ -1,4 +1,4 @@
-namespace RagEvaluator.Core.Entities;
+﻿namespace RagEvaluator.RelevanceJudge.Models.Entities;
 
 /// <summary>
 /// Оценка релевантности чанка к вопросу, присвоенная LLM-судьёй (judge).
