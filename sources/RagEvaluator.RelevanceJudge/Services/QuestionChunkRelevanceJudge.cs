@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RagEvaluator.RelevanceJudge.Extensions;
 using RagEvaluator.RelevanceJudge.Interfaces;
 using RagEvaluator.RelevanceJudge.Models.Configurations;
 using RagEvaluator.RelevanceJudge.Models.Entities;
 using RagEvaluator.RelevanceJudge.Prompts;
+using RagEvaluator.RelevanceJudge.Utils;
 using RagEvaluator.Utilities;
 using System.Text.Json;
 
@@ -34,7 +34,7 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
         _chatClient = chatClient;
         _judgingSettings = judgingSettings.Value;
 
-        _chatOptions = RelevanceJudgingChatOptionsExtensions.Create(_judgingSettings);
+        _chatOptions = RelevanceJudgingChatOptionsFactory.Create(_judgingSettings);
 
         if (!string.IsNullOrEmpty(_judgingSettings.OpenAI.AdditionalSystemPromptPath))
             _systemPromptOverlay = TextFileStorage.Read(_judgingSettings.OpenAI.AdditionalSystemPromptPath);
@@ -118,7 +118,7 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
         {
             rating = JsonSerializer.Deserialize<RelevanceRating>(
                 responseText.Trim(),
-                RelevanceJudgingChatOptionsExtensions.RelevanceJudgingJsonSchemaOptions);
+                RelevanceJudgingChatOptionsFactory.RelevanceJudgingJsonSchemaOptions);
 
             return rating is not null;
         }

@@ -3,9 +3,9 @@ using RagEvaluator.RelevanceJudge.Models.Configurations;
 using RagEvaluator.RelevanceJudge.Models.Entities;
 using System.Text.Json;
 
-namespace RagEvaluator.RelevanceJudge.Extensions;
+namespace RagEvaluator.RelevanceJudge.Utils;
 
-internal static class RelevanceJudgingChatOptionsExtensions
+internal static class RelevanceJudgingChatOptionsFactory
 {
     public static JsonSerializerOptions RelevanceJudgingJsonSchemaOptions = new JsonSerializerOptions()
     {
@@ -19,9 +19,9 @@ internal static class RelevanceJudgingChatOptionsExtensions
 
         return new ChatOptions
         {
-            ModelId = settings.Model,
-            Temperature = settings.Temperature,
-            MaxOutputTokens = settings.MaxOutputTokens,
+            ModelId = settings.OpenAI.Model,
+            Temperature = settings.OpenAI.Temperature,
+            MaxOutputTokens = settings.OpenAI.MaxOutputTokens,
 
             ResponseFormat = ChatResponseFormat.ForJsonSchema(
                 AIJsonUtilities.CreateJsonSchema(
