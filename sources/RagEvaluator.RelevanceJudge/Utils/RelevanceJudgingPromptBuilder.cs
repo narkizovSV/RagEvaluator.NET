@@ -1,10 +1,9 @@
-﻿namespace RagEvaluator.RelevanceJudge.Prompts;
+﻿namespace RagEvaluator.RelevanceJudge.Utils;
 
 /// <summary>
-/// Шаблоны сообщений для сценария <see cref="LlmScenarioType.RelevanceJudging"/>:
-/// system-промпт (базовый + надстройка из конфигурации) и user-сообщение «вопрос — partition».
+/// Строит system- и user-prompt для сценария оценки релевантности.
 /// </summary>
-public static class QuestionChunkUserPrompt
+public static class RelevanceJudgingPromptBuilder
 {
     private const string BaseSystemPrompt = """
         You are an expert relevance evaluator for Retrieval-Augmented Generation (RAG) systems.

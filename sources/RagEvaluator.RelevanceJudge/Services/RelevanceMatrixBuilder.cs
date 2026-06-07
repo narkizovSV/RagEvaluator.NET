@@ -67,7 +67,7 @@ public class RelevanceMatrixBuilder : IRelevanceMatrixBuilder
             var rootException = failedTask?.Exception?.Flatten().InnerExceptions.FirstOrDefault();
 
             throw new InvalidOperationException(
-                "Failed to build relevance matrix because a relevance check failed and remaining operations were cancelled.",
+                "Не удалось построить матрицу релевантности из-за сбоя проверки релевантности и оставшиеся операции были отменены.",
                 rootException);
         }
 

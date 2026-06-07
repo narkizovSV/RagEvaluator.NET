@@ -13,7 +13,7 @@ public class RelevanceJudgingOptions
     /// <summary>
     /// Путь к файлу с тестовыми вопросами для оценки релевантности.
     /// </summary>
-    public required string QuestionsFilePath {  get; set; }
+    public required string QuestionsFilePath { get; set; }
 
     /// <summary>
     /// Путь к файлу с партициями (фрагментами/чанками), по которым оценивается релевантность.
@@ -21,7 +21,12 @@ public class RelevanceJudgingOptions
     public required string PartitionsFilePath { get; set; }
 
     /// <summary>
+    /// Путь к сгенерированным файлам
+    /// </summary>
+    public required string OutputDirectory { get; set; }
+
+    /// <summary>
     ///  Настройки клиента OpenAI, используемого для оценки релевантности.
     /// </summary>
-    public required RelevanceJudgingOpenAIOptions OpenAI {  get; set; }
+    public required RelevanceJudgingOpenAIOptions OpenAI { get; set; }
 }

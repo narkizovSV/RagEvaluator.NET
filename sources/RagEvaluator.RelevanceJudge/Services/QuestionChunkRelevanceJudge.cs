@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using RagEvaluator.RelevanceJudge.Interfaces;
 using RagEvaluator.RelevanceJudge.Models.Configurations;
 using RagEvaluator.RelevanceJudge.Models.Entities;
-using RagEvaluator.RelevanceJudge.Prompts;
 using RagEvaluator.RelevanceJudge.Utils;
 using RagEvaluator.Utilities;
 using System.Text.Json;
@@ -60,12 +59,12 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
                     return rating;
 
                 _logger.LogWarning(
-                    "LLM returned invalid relevance payload on attempt {Attempt}/{MaxAttempts}.",
+                    "При попытке {Attempt}/{maxAttempts} LLM вернул недопустимую полезную нагрузку по релевантности.",
                     attempt,
                     maxAttempts);
 
                 _logger.LogDebug(
-                    "Unexpected relevance response: {Response}",
+                    "Неожиданный ответ по релевантности: {Response}",
                     response.Text);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -76,7 +75,7 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
             {
                 _logger.LogWarning(
                     ex,
-                    "LLM relevance judging failed on attempt {Attempt}/{MaxAttempts}.",
+                    "Оценка релевантности LLM не удалась с первой попытки {Attempt}/{MaxAttempts}.",
                     attempt,
                     maxAttempts);
             }
@@ -89,7 +88,7 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
             }
         }
 
-        var message = $"Failed to get a valid relevance rating from LLM after {maxAttempts} attempts.";
+        var message = $"Не удалось получить действительный рейтинг релевантности от LLM после {maxAttempts} попыток.";
 
         _logger.LogError(
             "{Message}",
@@ -102,8 +101,8 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
     {
         return
         [
-            new ChatMessage(ChatRole.System, QuestionChunkUserPrompt.BuildSystemPrompt(_systemPromptOverlay)),
-            new ChatMessage(ChatRole.User, QuestionChunkUserPrompt.BuildUserMessage(questionText, chunkText))
+            new ChatMessage(ChatRole.System, RelevanceJudgingPromptBuilder.BuildSystemPrompt(_systemPromptOverlay)),
+            new ChatMessage(ChatRole.User, RelevanceJudgingPromptBuilder.BuildUserMessage(questionText, chunkText))
         ];
     }
 
@@ -126,7 +125,7 @@ public class QuestionChunkRelevanceJudge : IQuestionChunkRelevanceJudge
         {
             _logger.LogDebug(
                 ex,
-                "Failed to deserialize LLM response as {Type}. Response: {Response}",
+                "Не удалось десериализовать ответ LLM как {Type}. Ответ: {Response}",
                 nameof(RelevanceRating),
                 responseText);
 

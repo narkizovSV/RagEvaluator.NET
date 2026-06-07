@@ -1,6 +1,5 @@
 <Solution>
-  <Project Path="RagEvaluator.ConsoleApp/RagEvaluator.ConsoleApp.csproj" Id="bc919539-7540-41c2-9caf-e1cd994c3eb1" />
-  <Project Path="RagEvaluator.RelevanceJudge.Models/RagEvaluator.RelevanceJudge.Models.csproj" Id="843be6f4-79f1-4958-9ac1-f426970b0ef2" />
-  <Project Path="RagEvaluator.RelevanceJudge/RagEvaluator.RelevanceJudge.csproj" Id="7599e213-6de4-4dbd-88d8-0c1f08f903cf" />
+  <Project Path="RagEvaluator.RelevanceJudge.Example/RagEvaluator.RelevanceJudge.Example.csproj" Id="bc919539-7540-41c2-9caf-e1cd994c3eb1" />
+  <Project Path="RagEvaluator.RelevanceJudge/RagEvaluator.RelevanceJudge.csproj" Id="eb911069-c1d1-46f3-aec6-10332c0ea3a1" />
   <Project Path="RagEvaluator.Utilities/RagEvaluator.Utilities.csproj" Id="acb8e1ad-6a04-4622-abf7-0f2321259755" />
 </Solution>

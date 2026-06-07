@@ -28,4 +28,3 @@ public sealed class RelevanceScaleMapper : IRelevanceScaleMapper
         return (binary, ternary);
     }
 }
-

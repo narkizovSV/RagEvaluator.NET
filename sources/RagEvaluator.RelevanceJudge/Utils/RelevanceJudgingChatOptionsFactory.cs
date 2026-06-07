@@ -19,7 +19,6 @@ internal static class RelevanceJudgingChatOptionsFactory
 
         return new ChatOptions
         {
-            ModelId = settings.OpenAI.Model,
             Temperature = settings.OpenAI.Temperature,
             MaxOutputTokens = settings.OpenAI.MaxOutputTokens,
 
