@@ -12,6 +12,9 @@ public static class RanxQrelsConverter
 
         foreach (var entry in entries)
         {
+            if (entry.BinaryRelevanceScore != 1)
+                continue;
+
             if (string.IsNullOrWhiteSpace(entry.QuestionId))
                 continue;
 
@@ -39,6 +42,9 @@ public static class RanxQrelsConverter
 
         foreach (var entry in entries)
         {
+            if (entry.TernaryRelevanceScore <= 0)
+                continue;
+
             if (string.IsNullOrWhiteSpace(entry.QuestionId))
                 continue;
 
