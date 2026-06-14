@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RagEvaluator.Retrieval.Metrics\RagEvaluator.Retrieval.Metrics.csproj" />
+    <ProjectReference Include="..\RagEvaluator.Utilities\RagEvaluator.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +22,12 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="data\qrels.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="data\run.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

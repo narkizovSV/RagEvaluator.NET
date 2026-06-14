@@ -1,4 +1,8 @@
-﻿namespace RagEvaluator.Retrieval.Metrics.Models.Configurations;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace RagEvaluator.Retrieval.Metrics.Models.Configurations;
 
 /// <summary>
 /// Настройки приложения для оценки качества результатов поиска.

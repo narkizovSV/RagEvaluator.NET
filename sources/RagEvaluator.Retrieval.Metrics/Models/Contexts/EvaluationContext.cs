@@ -1,9 +1,9 @@
-﻿namespace RagEvaluator.Retrieval.Metrics.Models;
+﻿namespace RagEvaluator.Retrieval.Metrics.Models.Contexts;
 
 /// <summary>
-/// 
+/// Базовый контекст для вычисления метрик качества ранжирования.
 /// </summary>
-public class EvaluationContext
+public class EvaluationContextBase
 {
     /// <summary>
     /// Уникальный идентификатор оценки / запроса.
@@ -12,16 +12,13 @@ public class EvaluationContext
 
     /// <summary>
     /// Идентификаторы релевантных документов для данного запроса.
+    /// Key - DocumentId, Value - степень релевантности.
     /// </summary>
     public required IReadOnlyDictionary<string, int> RelevantDocumentIds { get; init; }
 
     /// <summary>
     /// Идентификаторы документов, ранжированные системой по score по убыванию.
+    /// Key - DocumentId, Value - score.
     /// </summary>
     public required IReadOnlyDictionary<string, double> RankedDocumentIdsByScoreDesc { get; init; }
-
-    /// <summary>
-    /// Список позиций, на которых нужно просчитать метрики
-    /// </summary>
-    public required int[] K { get; init; }
 }

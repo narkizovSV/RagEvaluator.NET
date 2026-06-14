@@ -1,4 +1,4 @@
-namespace RagEvaluator.Retrieval.Metrics.Models;
+﻿namespace RagEvaluator.Retrieval.Metrics.Models;
 
 /// <summary>
 /// Сводный результат вычисления всех метрик ранжирования для одного запроса.

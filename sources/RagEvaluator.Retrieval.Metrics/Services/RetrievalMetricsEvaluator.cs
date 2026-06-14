@@ -1,42 +1,83 @@
-using Microsoft.Extensions.Options;
-using RagEvaluator.Retrieval.Metrics.Base;
+﻿using Microsoft.Extensions.Options;
+using RagEvaluator.Retrieval.Metrics.Abstractions;
 using RagEvaluator.Retrieval.Metrics.Interfaces;
 using RagEvaluator.Retrieval.Metrics.Models;
 using RagEvaluator.Retrieval.Metrics.Models.Configurations;
+using RagEvaluator.Retrieval.Metrics.Models.Contexts;
+using RagEvaluator.Retrieval.Metrics.Utils;
 
 namespace RagEvaluator.Retrieval.Metrics.Services;
 
 public class RetrievalMetricsEvaluator : IRetrievalMetricsEvaluator
 {
-    private readonly IReadOnlyDictionary<string, IMetric<EvaluationContext>> _metricsByName;
     private readonly MetricSettings _settings;
+    private readonly IReadOnlyList<ITopKMetricBase<EvaluationContextWithK>> _topKMetrics;
+    private readonly IReadOnlyList<IAggregateTopKMetric<EvaluationContextWithK>> _aggregateTopKMetrics;
 
     public RetrievalMetricsEvaluator(
-        IEnumerable<IMetric<EvaluationContext>> metrics,
-        IOptions<MetricSettings> settings)
+        IOptions<MetricSettings> settings,
+        IEnumerable<ITopKMetricBase<EvaluationContextWithK>> topKMetrics,
+        IEnumerable<IAggregateTopKMetric<EvaluationContextWithK>> aggregateTopKMetrics)
     {
-        ArgumentNullException.ThrowIfNull(metrics);
         ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(topKMetrics);
+        ArgumentNullException.ThrowIfNull(aggregateTopKMetrics);
 
-        _metricsByName = metrics.ToDictionary(metric => metric.Name);
         _settings = settings.Value;
+        _topKMetrics = topKMetrics.ToList();
+        _aggregateTopKMetrics = aggregateTopKMetrics.ToList();
     }
 
-    public EvaluationSummary Evaluate(EvaluationContext context)
+    public async Task<BatchEvaluationSummary> Evaluate()
     {
-        ArgumentNullException.ThrowIfNull(context);
+        var contexts = await EvaluationContextFactory.Create(
+            _settings.QrelsFilePath,
+            _settings.RunFilePath);
 
-        if (_settings.MetricNames.Length == 0)
-            throw new InvalidOperationException("Список метрик в конфигурации не должен быть пустым.");
+        if (contexts.Count == 0)
+            throw new ArgumentException("Список контекстов не должен быть пустым.", nameof(contexts));
 
-        var metricResults = new List<EvaluationResult>(_settings.MetricNames.Length);
+        var requestedMetrics = _settings.MetricNames.ToHashSet(StringComparer.Ordinal);
 
-        foreach (var metricName in _settings.MetricNames)
+        ValidateMetricNames(requestedMetrics);
+
+        var enabledTopKMetrics = _topKMetrics
+            .Where(metric => requestedMetrics.Contains(metric.Name))
+            .ToList();
+
+        var enabledAggregateMetrics = _aggregateTopKMetrics
+            .Where(metric => requestedMetrics.Contains(metric.Name))
+            .ToList();
+
+        var querySummaries = contexts
+            .Select(context => CreateQuerySummary(context, enabledTopKMetrics))
+            .ToList();
+
+        return new BatchEvaluationSummary
         {
-            if (!_metricsByName.TryGetValue(metricName, out var metric))
-                throw new InvalidOperationException($"Метрика '{metricName}' не зарегистрирована.");
+            QuerySummaries = querySummaries,
+            AggregatedMetricResults = ComputeAggregatedResults(contexts, enabledAggregateMetrics)
+        };
+    }
 
-            metricResults.Add(metric.Evaluate(context));
+    private EvaluationSummary CreateQuerySummary(
+        EvaluationContextBase context,
+        IReadOnlyList<ITopKMetricBase<EvaluationContextWithK>> enabledTopKMetrics)
+    {
+        var metricResults = new List<EvaluationResult>();
+
+        foreach (var k in _settings.TopKValues)
+        {
+            var contextWithK = new EvaluationContextWithK
+            {
+                EvaluationId = context.EvaluationId,
+                RelevantDocumentIds = context.RelevantDocumentIds,
+                RankedDocumentIdsByScoreDesc = context.RankedDocumentIdsByScoreDesc,
+                K = k
+            };
+
+            foreach (var metric in enabledTopKMetrics)
+                metricResults.Add(metric.Evaluate(contextWithK));
         }
 
         return new EvaluationSummary
@@ -44,5 +85,49 @@ public class RetrievalMetricsEvaluator : IRetrievalMetricsEvaluator
             EvaluationId = context.EvaluationId,
             MetricResults = metricResults
         };
+    }
+
+    private IReadOnlyList<EvaluationResult> ComputeAggregatedResults(
+        IReadOnlyList<EvaluationContextBase> contexts,
+        IReadOnlyList<IAggregateTopKMetric<EvaluationContextWithK>> enabledAggregateMetrics)
+    {
+        var aggregatedResults = new List<EvaluationResult>();
+
+        foreach (var k in _settings.TopKValues)
+        {
+            var contextsWithK = contexts
+                .Select(context => new EvaluationContextWithK
+                {
+                    EvaluationId = context.EvaluationId,
+                    RelevantDocumentIds = context.RelevantDocumentIds,
+                    RankedDocumentIdsByScoreDesc = context.RankedDocumentIdsByScoreDesc,
+                    K = k
+                })
+                .ToList();
+
+            foreach (var aggregateMetric in enabledAggregateMetrics)
+                aggregatedResults.Add(aggregateMetric.Evaluate(contextsWithK, k));
+        }
+
+        return aggregatedResults;
+    }
+
+    private static void ValidateMetricNames(HashSet<string> requestedMetrics)
+    {
+        var supportedMetrics = new HashSet<string>(StringComparer.Ordinal)
+        {
+            SupportMetrics.PrecisionAtK,
+            SupportMetrics.RecallAtK,
+            SupportMetrics.Mrr,
+            SupportMetrics.AveragePrecisionAtK,
+            SupportMetrics.MeanAveragePrecisionAtK,
+            SupportMetrics.NdcgAtK
+        };
+
+        foreach (var metricName in requestedMetrics)
+        {
+            if (!supportedMetrics.Contains(metricName))
+                throw new InvalidOperationException($"Метрика '{metricName}' не поддерживается.");
+        }
     }
 }

@@ -11,8 +11,12 @@ public class EvaluationResult
     public required string MetricName { get; init; }
 
     /// <summary>
-    /// Оценки по каждой K метрики
+    /// Оценка
     /// </summary>
-    public required IReadOnlyDictionary<int, double> Values { get; init; }
-}
+    public required double Value { get; init; }
 
+    /// <summary>
+    /// Количество верхних документов ранжированного списка, используемых для расчёта.
+    /// </summary>
+    public int? K { get; init; }
+}
