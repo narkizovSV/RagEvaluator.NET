@@ -1,12 +1,11 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RagEvaluator.Retrieval.Metrics.Interfaces;
-using RagEvaluator.Retrieval.Metrics.IoC;
-using RagEvaluator.Retrieval.Metrics.Models.Configurations;
-using RagEvaluator.Utilities;
+using RagEvaluator.Retrieval.Metrics;
+using RagEvaluator.Retrieval.Metrics.Abstractions.Interfaces;
+using RagEvaluator.Retrieval.Metrics.Abstractions.Models;
+using System.Text.Json;
 
 var config = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
@@ -31,7 +30,7 @@ using var scope = provider.CreateScope();
 var metricSettings = scope.ServiceProvider.GetRequiredService<IOptions<MetricSettings>>().Value;
 var evaluator = scope.ServiceProvider.GetRequiredService<IRetrievalMetricsEvaluator>();
 
-var summary = await evaluator.Evaluate();
+var summary = await evaluator.EvaluateAsync();
 
 await JsonFileObjectStorage.WriteAsync(
     metricSettings.OutputFilePath,

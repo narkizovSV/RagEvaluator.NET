@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RagEvaluator.Retrieval.Metrics;
+﻿namespace RagEvaluator.Retrieval.Metrics;
 
 /// <summary>
 /// Имена реализаций метрик ранжирования для использования в конфигурации (<c>appsettings.json</c>).
@@ -30,7 +26,7 @@ public static class SupportMetrics
     public const string AveragePrecisionAtK = "AP@K";
 
     /// <summary>
-    /// Average Precision@K для одного запроса; MAP@K — среднее при агрегации по запросам.
+    /// Среднее Average Precision@K при агрегации по запросам.
     /// </summary>
     public const string MeanAveragePrecisionAtK = "MAP@K";
 

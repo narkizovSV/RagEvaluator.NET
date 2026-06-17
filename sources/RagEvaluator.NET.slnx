@@ -1,7 +1,8 @@
 <Solution>
   <Project Path="RagEvaluator.RelevanceJudge.Example/RagEvaluator.RelevanceJudge.Example.csproj" Id="bc919539-7540-41c2-9caf-e1cd994c3eb1" />
   <Project Path="RagEvaluator.RelevanceJudge/RagEvaluator.RelevanceJudge.csproj" Id="eb911069-c1d1-46f3-aec6-10332c0ea3a1" />
-  <Project Path="RagEvaluator.Retrieval.Metrics.Example/RagEvaluator.Retrieval.Metrics.Example.csproj" Id="4952f5d9-709b-44a8-b58c-a28e0f636d3e" />
-  <Project Path="RagEvaluator.Retrieval.Metrics/RagEvaluator.Retrieval.Metrics.csproj" Id="740cf0f2-6548-4356-9549-7cff15c40225" />
+  <Project Path="RagEvaluator.Retrieval.Metrics.Abstractions/RagEvaluator.Retrieval.Metrics.Abstractions.csproj" Id="9df2aca5-b6dc-4a3e-bd80-2b88ca4ee376" />
+  <Project Path="RagEvaluator.Retrieval.Metrics.Example/RagEvaluator.Retrieval.Metrics.Example.csproj" Id="171ba245-ed9e-48e4-9e7d-dd85e9d51801" />
+  <Project Path="RagEvaluator.Retrieval.Metrics/RagEvaluator.Retrieval.Metrics.csproj" Id="2d47c75b-4156-4370-b42d-c096016df43d" />
   <Project Path="RagEvaluator.Utilities/RagEvaluator.Utilities.csproj" Id="acb8e1ad-6a04-4622-abf7-0f2321259755" />
 </Solution>
